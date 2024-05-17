@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag and Replace</title>
+<style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: grab;
+  }
+
+  .image {
+    flex: 0 0 auto;
+    width: 300px;
+    height: 200px;
+    margin-right: 10px;
+    user-select: none;
+    transition: transform 0.2s;
+  }
+
+  .container.dragging {
+    cursor: grabbing;
+  }
+
+  .image.dragging {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="container" onmousedown="startDrag(event)" onmousemove="drag(event)" onmouseup="endDrag()">
+  <img class="image" src="grid-box.png" alt="Image 1" data-index="0">
+  <img class="image" src="grid-box1.png" alt="Image 2" data-index="1">
+  <img class="image" src="grid-box2.png" alt="Image 3" data-index="2">
+  <!-- 필요한 만큼 이미지를 추가합니다 -->
+</div>
+
+<script>
+  let startX;
+  let startImageIndex;
+  let isDragging = false;
+  let draggedImage = null;
+  const container = document.querySelector('.container');
+  const images = document.querySelectorAll('.image');
+
+  function startDrag(e) {
+    const clickedImage = e.target.closest('.image');
+    if (!clickedImage) return;
+    isDragging = true;
+    draggedImage = clickedImage;
+    startX = e.pageX;
+    startImageIndex = parseInt(clickedImage.dataset.index);
+    container.classList.add('dragging');
+    clickedImage.classList.add('dragging');
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    draggedImage.classList.remove('dragging');
+    container.classList.remove('dragging');
+    const endX = parseInt(draggedImage.style.transform.replace('translateX(', '').replace('px)', '')) || 0;
+    const deltaX = endX;
+    const newIndex = Math.max(0, Math.min(startImageIndex + Math.round(deltaX / 310), images.length - 1));
+    const targetImage = images[newIndex];
+    container.insertBefore(draggedImage, targetImage);
+    updateImageIndices();
+    draggedImage.style.transform = 'none';
+    draggedImage = null;
+  }
+
+  function drag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const offsetX = e.pageX - startX;
+    draggedImage.style.transform = `translateX(${offsetX}px)`;
+  }
+
+  function updateImageIndices() {
+    images.forEach((image, index) => {
+      image.dataset.index = index;
+    });
+  }
+</script>
+
+</body>
+</html>

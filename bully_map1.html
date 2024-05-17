@@ -1,0 +1,244 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BULLY : 나쁜 아이</title>
+    <style>
+        .headtitle {
+            display: flex; /* 내용물 가로로 배치 */
+            justify-content: space-between; /* 화면 양옆으로 배치 */
+            align-items: center; /* 상하 중앙 정렬 */
+        }
+        .logo img {
+            display: block;
+            background-color: #ece8e1;
+            max-width: 100%;
+            height: auto;
+        }
+        ul {
+            display: flex;
+            justify-content: left; /* flex 아이템 끝으로 붙이기 */
+            flex: 1; /* 빈 공간 좁히기 */
+            list-style: none;
+        }
+        .logo>ul {
+            background-color: #ece8e1;
+        }
+        li:not(:last-child) {
+            margin-right: 50px; /* 가장 마지막 li을 제외하고 지정 */
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #wrap {
+            width: 1920px;
+            height: 1080px;
+            background-color: #ece8e1;
+            overflow: hidden; /* 가로 1920px, 세로 1080px의 영역을 넘지 않도록 숨김 */
+            position: relative;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100px;
+            width: 50px;
+            background-color: none;
+            font-style: helvetica;
+            font-weight: 1000;
+            font-size: 50px;
+            color: #c5950b;
+            margin-left: 45px;
+            margin-top: 30px;
+        }
+        .a1 {
+            width: 1920px;
+            height: 50px;
+            border: none;
+            background-color: #ece8e1;
+        }
+        .a2 {
+            width: 1837px;
+            height: 160px;
+            border: none;
+            background-color: #ece8e1;
+            object-fit: cover;
+            float: left;
+            margin: 0px;
+            box-sizing: border-box;
+            font-style: helvetica;
+            font-weight: 1000;
+            font-size: 80px;
+            margin-left: 83px;
+        }
+        .scroll-container {
+            width: 1920px; /* 화면 너비만큼 설정 */
+            height: 700px;
+            overflow-x: hidden; /* 스크롤은 JS로 제어하므로 숨김 */
+            white-space: nowrap; /* 박스를 가로로 배치 */
+            margin: 0 auto;
+            position: relative;
+            cursor: grab;
+        }
+        .scroll-content {
+            display: flex; /* 박스들을 가로로 배치 */
+            width: max-content; /* 내용물 크기만큼 너비 설정 */
+            padding-left: calc(50% - 600px); /* 첫 박스를 중앙에 위치시키기 위해 여백 추가 */
+            padding-right: calc(50% - 600px); /* 마지막 박스도 중앙에 위치시키기 위해 여백 추가 */
+        }
+        .scroll-box {
+            width: 1200px;
+            height: 500px;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            line-height: 500px; /* 박스 내부 텍스트 중앙 정렬 */
+            flex-shrink: 0; /* flex 컨테이너 크기에 맞춰 축소되지 않도록 */
+            margin-right: 90px; /* 박스들 사이에 90px의 간격 추가 */
+            position: relative; /* 상대 위치 설정 */
+        }
+        .scroll-box:last-child {
+            margin-right: 0; /* 마지막 박스에는 마진을 추가하지 않음 */
+        }
+        .c1 {
+            width: 220px;
+            height: 80px;
+            border: 0px solid #000;
+            background-color: #c5950b;
+            padding: 0px;
+            margin: 80px auto;
+            box-sizing: border-box;
+            font-style: helvetica;
+            font-weight: 1000;
+            font-size: 50px;
+            text-align: center;
+        }
+        /* 수정된 스타일 */
+        .overlay {
+            position: absolute;
+            top: 600px; /* 원래 위치에서 아래쪽으로 300px 이동 */
+            left: 1350px; /* 원래 위치에서 오른쪽으로 60px 이동 */
+            width: 400px; /* 가로로 긴 직사각형 */
+            height: 300px;
+            background-color: yellow; /* 노란색 배경 */
+            z-index: 2; /* box들보다 앞에 위치 */
+            pointer-events: none; /* 이벤트를 허용하지 않음 */
+        }
+        .overlay .text {
+            display: none; /* 기본적으로 텍스트는 보이지 않게 설정 */
+            text-align: center;
+            line-height: 100px; /* 텍스트 중앙 정렬 */
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .overlay .text.active {
+            display: block; /* 활성화된 텍스트만 보이게 설정 */
+        }
+    </style>
+</head>
+<body>
+    <div class="headtitle">
+        <div class="logo">
+            <img src="이미지 가지고 오기" alt="이미지 설명">
+            <ul>
+                <li><a href="">메뉴 1</a></li>
+                <li><a href="">메뉴 2</a></li>
+                <li><a href="">메뉴 3</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="wrap">
+        <div class="a1"></div>
+        <div class="a2">MAP</div>
+        <div class="scroll-container">
+            <div class="scroll-content">
+                <div class="scroll-box">box1</div> 
+                <div class="scroll-box">box2</div>
+                <div class="scroll-box">box3</div>
+            </div>
+        </div>
+        <div class="c1">more</div>
+        <!-- 반투명한 div 박스 -->
+        <div class="overlay">
+            <div class="text" id="text1"> Bullies
+                Russell Northrop is the undisputed leader of the Bullies. 
+            </div>
+            <div class="text" id="text2">2번 텍스트</div>
+            <div class="text" id="text3">3번 텍스트</div>
+        </div>
+    </div>
+
+    <script>
+        const scrollContainer = document.querySelector('.scroll-container');
+        const scrollContent = document.querySelector('.scroll-content');
+        const scrollBoxes = document.querySelectorAll('.scroll-box');
+        const texts = document.querySelectorAll('.overlay .text');
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        scrollContainer.addEventListener('mousedown', (e) => {
+            isDown = true;
+            scrollContainer.classList.add('active');
+            startX = e.pageX - scrollContainer.offsetLeft;
+            scrollLeft = scrollContainer.scrollLeft;
+        });
+
+        scrollContainer.addEventListener('mouseleave', () => {
+            isDown = false;
+            scrollContainer.classList.remove('active');
+        });
+
+        scrollContainer.addEventListener('mouseup', () => {
+            isDown = false;
+            scrollContainer.classList.remove('active');
+            snapToBox();
+        });
+
+        scrollContainer.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - scrollContainer.offsetLeft;
+            const walk = (x - startX) * 3; // 스크롤 속도 조절
+            scrollContainer.scrollLeft = scrollLeft - walk;
+        });
+
+        function snapToBox() {
+            const scrollCenter = scrollContainer.scrollLeft + scrollContainer.offsetWidth / 2;
+            let closestBox = null;
+            let closestDistance = Infinity;
+
+            scrollBoxes.forEach((box, index) => {
+                const boxCenter = box.offsetLeft + box.offsetWidth / 2;
+                const distance = Math.abs(scrollCenter - boxCenter);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestBox = box;
+                    updateOverlayText(index + 1);
+                }
+            });
+
+            if (closestBox) {
+                const boxCenter = closestBox.offsetLeft + closestBox.offsetWidth / 2;
+                scrollContainer.scroll({
+                    left: boxCenter - scrollContainer.offsetWidth / 2,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function updateOverlayText(visibleIndex) {
+            texts.forEach((text, index) => {
+                if (index === visibleIndex - 1) {
+                    text.classList.add('active');
+                } else {
+                    text.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
